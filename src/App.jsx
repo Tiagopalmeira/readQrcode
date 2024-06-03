@@ -17,10 +17,10 @@ function QRScanner() {
 
     html5QrCode.start(
       { facingMode: "environment" },
-      function (decodedText) {
+      (decodedText) => {
         setQrCodeText(decodedText);
       },
-      function (errorMessage) {
+      (errorMessage) => {
         console.error("Erro ao escanear: " + errorMessage);
       }
     );
@@ -39,10 +39,10 @@ function QRScanner() {
     const html5QrCode = new Html5Qrcode("reader");
 
     html5QrCode.scanFile(file, true)
-      .then(decodedText => {
+      .then((decodedText) => {
         setQrCodeText(decodedText);
       })
-      .catch(err => {
+      .catch((err) => {
         console.error("Erro ao escanear o arquivo: ", err);
       });
   };

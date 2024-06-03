@@ -67,12 +67,12 @@ function QRScanner() {
 
       <button onClick={() => document.querySelector('input[type="file"]').click()} disabled={isCameraActive}>Selecionar arquivo</button>
 
-      <input 
-        type="text" 
-        value={qrCodeText} 
+      <input
+        type="text"
+        value={qrCodeText}
         onChange={(e) => setQrCodeText(e.target.value)}
-        placeholder="Texto do código QR" 
-        style={{ marginTop: "20px" }} 
+        placeholder="Texto do código QR"
+        style={{ marginTop: "20px" }}
       />
     </div>
   );

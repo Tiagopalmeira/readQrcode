@@ -26,7 +26,11 @@ function QRScanner() {
     );
 
     return () => {
-      html5QrCode.stop();
+      html5QrCode.stop().then(() => {
+        console.log("Leitura de QR code interrompida.");
+      }).catch((err) => {
+        console.error("Erro ao interromper leitura de QR code: " + err);
+      });
     };
   };
 

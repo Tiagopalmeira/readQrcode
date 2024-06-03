@@ -59,6 +59,7 @@ function QRScanner() {
 
   return (
     <div>
+      <h1> Leitor de códigos de barras. </h1>
       <div id="reader" style={{ width: "100%", maxWidth: "600px", height: "400px", border: "2px solid #333", margin: "20px auto" }}></div>
 
       <input type="file" accept="image/*" onChange={handleFileInputChange} style={{ display: "none" }} />

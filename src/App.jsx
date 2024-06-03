@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Html5Qrcode } from "html5-qrcode";
+import { Html5QrcodeScanner } from "html5-qrcode";
 
 function QRScanner() {
   const [isCameraActive, setIsCameraActive] = useState(false);
@@ -12,11 +12,14 @@ function QRScanner() {
   }, [isCameraActive]);
 
   const startQrScanner = () => {
-    const html5QrCode = new Html5Qrcode("reader");
+    const html5QrCodeScanner = new Html5QrcodeScanner(
+      "reader",
+      { fps: 10, qrbox: { width: 250, height: 250 } },
+      false // verbose
+    );
 
-    html5QrCode.start(
-      { facingMode: "environment" },
-      (decodedText) => {
+    html5QrCodeScanner.render(
+      (decodedText, decodedResult) => {
         setQrCodeText(decodedText);
       },
       (errorMessage) => {
@@ -25,7 +28,7 @@ function QRScanner() {
     );
 
     return () => {
-      html5QrCode.stop();
+      html5QrCodeScanner.clear();
     };
   };
 
@@ -35,15 +38,23 @@ function QRScanner() {
 
   const handleFileInputChange = (e) => {
     const file = e.target.files[0];
-    const html5QrCode = new Html5Qrcode("reader");
+    const html5QrCodeScanner = new Html5QrcodeScanner(
+      "reader",
+      { fps: 10, qrbox: { width: 250, height: 250 } },
+      false // verbose
+    );
 
-    html5QrCode.scanFile(file, true)
-      .then(decodedText => {
+    html5QrCodeScanner.clear(); // Clear any existing scanner
+
+    html5QrCodeScanner.start(
+      { videoSource: file },
+      (decodedText, decodedResult) => {
         setQrCodeText(decodedText);
-      })
-      .catch(err => {
-        console.error("Erro ao escanear o arquivo: ", err);
-      });
+      },
+      (errorMessage) => {
+        console.error("Erro ao escanear o arquivo: ", errorMessage);
+      }
+    );
   };
 
   return (

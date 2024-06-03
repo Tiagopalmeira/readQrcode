@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Html5Qrcode } from "html5-qrcode";
-import "./App.css";
 
 function QRScanner() {
   const [isCameraActive, setIsCameraActive] = useState(false);
@@ -26,11 +25,7 @@ function QRScanner() {
     );
 
     return () => {
-      html5QrCode.stop().then(() => {
-        console.log("Leitura de QR code interrompida.");
-      }).catch((err) => {
-        console.error("Erro ao interromper leitura de QR code: " + err);
-      });
+      html5QrCode.stop();
     };
   };
 
@@ -43,20 +38,17 @@ function QRScanner() {
     const html5QrCode = new Html5Qrcode("reader");
 
     html5QrCode.scanFile(file, true)
-      .then((decodedText) => {
+      .then(decodedText => {
         setQrCodeText(decodedText);
       })
-      .catch((err) => {
+      .catch(err => {
         console.error("Erro ao escanear o arquivo: ", err);
       });
   };
 
   return (
-    <div style={{ textAlign: "center" }}>
-      <h1> testando novamente pt3</h1>
-      <div id="reader" style={{ width: "70%", maxWidth: "400px", height: "300px", border: "2px solid #333", margin: "20px auto" }}></div>
-
-      <div id="camera" style={{ width: "70%", maxWidth: "400px", height: "300px", border: "2px solid #333", margin: "20px auto" }}></div>
+    <div>
+      <div id="reader" style={{ width: "100%", maxWidth: "600px", height: "400px", border: "2px solid #333", margin: "20px auto" }}></div>
 
       <input type="file" accept="image/*" onChange={handleFileInputChange} style={{ display: "none" }} />
 
@@ -69,7 +61,7 @@ function QRScanner() {
         value={qrCodeText} 
         onChange={(e) => setQrCodeText(e.target.value)}
         placeholder="Texto do código QR" 
-        style={{ marginTop: "20px", width: "80%" }} 
+        style={{ marginTop: "20px" }} 
       />
     </div>
   );

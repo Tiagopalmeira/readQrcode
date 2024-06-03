@@ -52,9 +52,11 @@ function QRScanner() {
   };
 
   return (
-    <div>
-      <h1>Vamos ler essa bagaceira pt2 </h1>
-      <div id="reader" style={{ width: "100%", maxWidth: "600px", height: "400px", border: "2px solid #333", margin: "20px auto" }}></div>
+    <div style={{ textAlign: "center" }}>
+      <h1> testando novamente pt3</h1>
+      <div id="reader" style={{ width: "70%", maxWidth: "400px", height: "300px", border: "2px solid #333", margin: "20px auto" }}></div>
+
+      <div id="camera" style={{ width: "70%", maxWidth: "400px", height: "300px", border: "2px solid #333", margin: "20px auto" }}></div>
 
       <input type="file" accept="image/*" onChange={handleFileInputChange} style={{ display: "none" }} />
 
@@ -67,7 +69,7 @@ function QRScanner() {
         value={qrCodeText} 
         onChange={(e) => setQrCodeText(e.target.value)}
         placeholder="Texto do código QR" 
-        style={{ marginTop: "20px" }} 
+        style={{ marginTop: "20px", width: "80%" }} 
       />
     </div>
   );

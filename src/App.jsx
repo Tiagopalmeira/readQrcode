@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Html5QrcodeScanner } from "html5-qrcode"; // Importa o componente Html5QrcodeScanner
-import "../../public/css/form.css"; // Importa o arquivo de estilos CSS
+
 
 function QRScanner() {
   // Define os estados para controlar a ativação da câmera e o texto do código QR

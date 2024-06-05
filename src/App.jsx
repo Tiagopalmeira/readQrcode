@@ -1,94 +1,79 @@
 import React, { useState, useEffect } from "react";
-import { Html5QrcodeScanner } from "html5-qrcode"; // Importa o componente Html5QrcodeScanner
-
+import { Html5QrcodeScanner } from "html5-qrcode";
 
 function QRScanner() {
-  // Define os estados para controlar a ativação da câmera e o texto do código QR
   const [isCameraActive, setIsCameraActive] = useState(false);
   const [qrCodeText, setQrCodeText] = useState("");
 
-  // Efeito para inicializar e limpar o scanner de QR Code quando a câmera é ativada ou desativada
   useEffect(() => {
-    let html5QrcodeScanner;
-
-    // Inicializa o scanner quando a câmera está ativa
     if (isCameraActive) {
-      html5QrcodeScanner = startQrScanner();
+      startQrScanner();
     }
+  }, [isCameraActive]);
 
-    // Limpa o scanner quando o componente é desmontado ou a câmera é desativada
-    return () => {
-      if (html5QrcodeScanner) {
-        html5QrcodeScanner.clear().catch(err => console.error("Falha ao limpar o scanner de QR Code.", err));
-      }
-    };
-  }, [isCameraActive]); // Executa o efeito quando o estado isCameraActive é modificado
-
-  // Função para iniciar o scanner de QR Code
   const startQrScanner = () => {
-    const html5QrcodeScanner = new Html5QrcodeScanner(
-      "reader", // ID do elemento onde o scanner será renderizado
-      { fps: 10, qrbox: 500 }, // Opções de configuração do scanner
-      false // Modo de verbosidade (verbose)
+    const html5QrCodeScanner = new Html5QrcodeScanner(
+      "reader",
+      { fps: 10, qrbox: { width: 400, height: 400 } },
+      false // verbose
     );
 
-    // Renderiza o scanner com callbacks para tratamento de resultados
-    html5QrcodeScanner.render(
+    html5QrCodeScanner.render(
       (decodedText, decodedResult) => {
-        setQrCodeText(decodedText); // Atualiza o estado com o texto do código QR lido
+        setQrCodeText(decodedText);
       },
       (errorMessage) => {
-        console.error("Erro ao escanear: " + errorMessage); // Registra erro no console
+        console.error("Erro ao escanear: " + errorMessage);
       }
     );
 
-    return html5QrcodeScanner; // Retorna o scanner para possíveis operações futuras
+    return () => {
+      html5QrCodeScanner.clear();
+    };
   };
 
-  // Função para lidar com a ativação da câmera
   const handleStartCamera = () => {
-    setIsCameraActive(true); // Define o estado para ativar a câmera
+    setIsCameraActive(true);
   };
 
-  // Função para lidar com a seleção de arquivo
   const handleFileInputChange = (e) => {
-    const file = e.target.files[0]; // Obtém o arquivo selecionado
-    const html5QrCode = new Html5Qrcode("reader"); // Cria uma instância do scanner de QR Code
+    const file = e.target.files[0];
+    const html5QrCodeScanner = new Html5QrcodeScanner(
+      "reader",
+      { fps: 10, qrbox: { width: 150, height: 50 } },
+      false // verbose
+    );
 
-    // Escaneia o arquivo e trata o resultado
-    html5QrCode.scanFile(file, true)
-      .then(decodedText => {
-        setQrCodeText(decodedText); // Atualiza o estado com o texto do código QR lido
-      })
-      .catch(err => {
-        console.error("Erro ao escanear o arquivo: ", err); // Registra erro no console
-      })
-      .finally(() => {
-        html5QrCode.clear().catch(err => console.error("Falha ao limpar o scanner de QR Code.", err)); // Limpa o scanner após a leitura do arquivo
-      });
+    html5QrCodeScanner.clear(); // Clear any existing scanner
+
+    html5QrCodeScanner.start(
+      { videoSource: file },
+      (decodedText, decodedResult) => {
+        setQrCodeText(decodedText);
+      },
+      (errorMessage) => {
+        console.error("Erro ao escanear o arquivo: ", errorMessage);
+      }
+    );
   };
 
-  // Retorna o JSX do componente de scanner de QR Code
   return (
-    <div className="box">
-      <div id="reader"></div>
+    <div>
+      <h1>Leitor de códigos de barrasq</h1>
+      <div id="reader" style={{ width: "100%", height: "400px", border: "2px solid #333", margin: "20px auto" }}></div>
 
       <input type="file" accept="image/*" onChange={handleFileInputChange} style={{ display: "none" }} />
 
-      {/* Botões para selecionar a fonte do código QR */}
-      <div className="button-container">
-        <button onClick={handleStartCamera} disabled={isCameraActive}>Selecionar NFE</button>
-        <button onClick={() => document.querySelector('input[type="file"]').click()} disabled={isCameraActive}>Selecionar arquivo</button>
-      </div>
+      <button onClick={handleStartCamera} disabled={isCameraActive}>Ativar Câmera</button>
 
-      {/* Campo para inserir ou exibir o número da NFE */}
-      <span>Número da NFE:</span>
+      <button onClick={() => document.querySelector('input[type="file"]').click()} disabled={isCameraActive}>Selecionar arquivo</button>
+
       <input
         type="text"
-        className="inputtext"
         value={qrCodeText}
         onChange={(e) => setQrCodeText(e.target.value)}
-        placeholder="Insira ou leia os dados da NFE:"
+        placeholder="Texto do código QR"
+        style={{ marginTop: "20px" }}
       />
     </div>
   );

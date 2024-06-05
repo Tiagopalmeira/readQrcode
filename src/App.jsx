@@ -40,7 +40,7 @@ function QRScanner() {
     const file = e.target.files[0];
     const html5QrCodeScanner = new Html5QrcodeScanner(
       "reader",
-      { fps: 10, qrbox: { width: 150, height: 50 } },
+      { fps: 10, qrbox: { width: 500, height: 500 } },
       false // verbose
     );
 
@@ -59,7 +59,7 @@ function QRScanner() {
 
   return (
     <div>
-      <h1>Leitor de códigos de barras</h1>
+      <h1>Leitor de códigos de barras 1</h1>
       <div id="reader" style={{ width: "100%", height: "400px", border: "2px solid #333", margin: "20px auto" }}></div>
 
       <input type="file" accept="image/*" onChange={handleFileInputChange} style={{ display: "none" }} />

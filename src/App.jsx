@@ -40,7 +40,7 @@ function QRScanner() {
     const file = e.target.files[0];
     const html5QrCodeScanner = new Html5QrcodeScanner(
       "reader",
-      { fps: 10, qrbox: { width: 250, height: 250 } },
+      { fps: 10, qrbox: { width: 150, height: 50 } },
       false // verbose
     );
 
